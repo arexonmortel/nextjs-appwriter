@@ -3,6 +3,7 @@ import  User from '@/models/userModel'
 import { NextRequest, NextResponse } from 'next/server'
 import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { sendEmail } from '@/helpers/mailer'
 
 connect()
 
@@ -18,6 +19,15 @@ export async function POST(request: NextRequest) {
             if(!user){
                 return NextResponse.json({
                     message: 'You do not have an account'
+                },{
+                    status: 400
+                })
+            } else if(!user.isVerified){
+
+                // Send email verification
+                await sendEmail({email, emailType: 'VERIFY', userId: user._id})      
+                return NextResponse.json({
+                    message: 'Please verify your email'
                 },{
                     status: 400
                 })
