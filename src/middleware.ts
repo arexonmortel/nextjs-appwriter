@@ -19,9 +19,6 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/profile',  request.nextUrl));
     }
     
-    if (isPrivatePath && !sessionToken) {
-        return NextResponse.redirect(new URL('/login',  request.nextUrl));
-    }
 }
 
 
